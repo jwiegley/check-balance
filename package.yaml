@@ -19,6 +19,9 @@ library:
   source-dirs:
     - src
 
+data-files:
+  - balance
+
 executables:
   example-servant-minimal:
     main: exe/Main.hs
@@ -33,3 +36,5 @@ dependencies:
   - aeson
   - wai
   - warp
+  - text
+  - process

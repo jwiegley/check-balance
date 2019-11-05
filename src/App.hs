@@ -5,20 +5,19 @@
 
 module App where
 
-import           Data.Aeson
-import           GHC.Generics
-import           Network.Wai
-import           Network.Wai.Handler.Warp
-import           Servant
-import           System.IO
+import Control.Monad.IO.Class
+import Network.Wai
+import Network.Wai.Handler.Warp
+import Servant
+import System.IO
+import System.Process
 
 -- * api
 
-type ItemApi =
-  "item" :> Get '[JSON] [Item] :<|>
-  "item" :> Capture "itemId" Integer :> Get '[JSON] Item
+type BalanceApi =
+  "balance" :> Capture "account" String :> Get '[PlainText] String
 
-itemApi :: Proxy ItemApi
+itemApi :: Proxy BalanceApi
 itemApi = Proxy
 
 -- * app
@@ -35,34 +34,16 @@ run = do
 mkApp :: IO Application
 mkApp = return $ serve itemApi server
 
-server :: Server ItemApi
+server :: Server BalanceApi
 server =
-  getItems :<|>
-  getItemById
+  getAccountBalance
 
-getItems :: Handler [Item]
-getItems = return [exampleItem]
+getAccountBalance :: String -> Handler Balance
+getAccountBalance = \ case
+  "test" -> return exampleBalance
+  name -> liftIO $ readProcess "bash" ["balance", name] ""
 
-getItemById :: Integer -> Handler Item
-getItemById = \ case
-  0 -> return exampleItem
-  _ -> throwError err404
+exampleBalance :: Balance
+exampleBalance = "100.0"
 
-exampleItem :: Item
-exampleItem = Item 0 "example item"
-
--- * item
-
-data Item
-  = Item {
-    itemId :: Integer,
-    itemText :: String
-  }
-  deriving (Eq, Show, Generic)
-
-instance ToJSON Item
-instance FromJSON Item
-
-data a + b = Foo a b
-
-type X = Int + Bool
+type Balance = String
