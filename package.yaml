@@ -1,4 +1,4 @@
-name: example-servant-minimal
+name: check-balance
 
 ghc-options: -Wall
 
@@ -9,7 +9,7 @@ tests:
       - test
     dependencies:
       - hspec
-      - example-servant-minimal
+      - check-balance
       - servant-client
       - warp >= 3.2.4
       - http-client
@@ -23,10 +23,10 @@ data-files:
   - balance
 
 executables:
-  example-servant-minimal:
+  check-balance:
     main: exe/Main.hs
     dependencies:
-      - example-servant-minimal
+      - check-balance
 
 dependencies:
   - base

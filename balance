@@ -17,7 +17,7 @@ else
     }
     get-balance() {
         chainId=$1
-        BALANCE=$($PACT -l -a balCheck.yaml                                                                 \
+        BALANCE=$($PACT -l -a /tmp/balCheck.yaml                                                                 \
                       | curl -k -s -H "Content-Type: application/json" -d @-                                \
                             $KADENA_NODE/chainweb/0.0/$KADENA_VERSION/chain/$chainId/pact/api/v1/local      \
                       | python -m json.tool                                                                 \

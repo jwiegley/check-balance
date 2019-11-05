@@ -3,3 +3,4 @@ example-servant-minimal.cabal
 /balCheck.yaml
 /balance.log
 /pact.tix
+/check-balance.cabal
