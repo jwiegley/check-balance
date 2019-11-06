@@ -13,11 +13,11 @@ then
 else
     accountName=$1
     createBalanceYaml() {
-        echo "$accountName" | xargs printf "code: (coin.get-balance \"%s\") \nkeyPairs: []\n" > balCheck.yaml
+        echo "$accountName" | xargs printf "code: (coin.get-balance \"%s\") \nkeyPairs: []\n" > /tmp/balCheck$$.yaml
     }
     get-balance() {
         chainId=$1
-        BALANCE=$($PACT -l -a /tmp/balCheck.yaml                                                                 \
+        BALANCE=$($PACT -l -a /tmp/balCheck$$.yaml                                                                 \
                       | curl -k -s -H "Content-Type: application/json" -d @-                                \
                             $KADENA_NODE/chainweb/0.0/$KADENA_VERSION/chain/$chainId/pact/api/v1/local      \
                       | python -m json.tool                                                                 \
@@ -50,6 +50,6 @@ else
       echo "$(date +"%Y/%m/%d %H:%M:%S") $(echo $B0 + $B1 + $B2 + $B3 + $B4 + $B5 + $B6 + $B7 + $B8 + $B9 | bc)" >> balance.log
     }
     createBalanceYaml && allChains
-# rm balCheck.yaml
+    rm /tmp/balCheck$$.yaml
 fi
 
